@@ -1,0 +1,31 @@
+import zipfile
+file_name = "ext.zip"
+text = []
+with zipfile.ZipFile(file_name,'r')as zipObject:
+    for i in zipObject.infolist():
+        if i.filename.endswith('.txt'):
+            nonzipname = zipObject.open((i.filename), 'r')
+            unzip_rows_count = len(nonzipname.readlines())
+            unzip_subdir_filesize = i.file_size
+            a = (i.filename, unzip_rows_count, str(unzip_subdir_filesize)+"mb")
+            writer = text.append(str(a))
+            with open('readme10.txt', 'w') as f:
+                f.writelines(str(a) + "\n")
+                print(i.filename, unzip_rows_count, str(unzip_subdir_filesize) + "mb")
+            continue
+    for i in zipObject.infolist():
+        if not i.filename.endswith('.txt'):
+            with zipfile.ZipFile(i.filename,'r')as zipObject2:
+                for m in zipObject2.infolist():
+                    zipname = zipObject2.open((m.filename), 'r')
+                    zip_rows_count = len(zipname.readlines())
+                    zip_subdir_filesize = m.file_size
+                    o = i.filename
+                    with open('readme10.txt', 'a') as f:
+                        f.write(str(o)+"\n")
+                    print(o)
+                    p = (m.filename,zip_rows_count,str(zip_subdir_filesize)+"mb")
+                    with open('readme10.txt', 'a') as f:
+                        f.write(str(p))
+                    print(m.filename,zip_rows_count,str(zip_subdir_filesize)+"mb")
+                    
